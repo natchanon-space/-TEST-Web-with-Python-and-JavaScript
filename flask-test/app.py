@@ -2,13 +2,16 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+names = []
+
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/me")
+@app.route("/me", methods=["POST"])
 def me():
-    names = ['a', 'e', 'i', 'o', 'u']
+    name = request.form.get("name")
+    names.append(name)
     return render_template("me.html", names=names)
 
 @app.route("/add")
