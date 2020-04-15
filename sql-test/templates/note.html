@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Note</title>
+</head>
+
+<body>
+    <h1>NOTE : {{ username }}</h1>
+    <ul>
+        {% for note in notes %}
+        <li>{{ note.note }} date: {{ note.date }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('logout') }}">logout</a>
+    <a href="{{ url_for('add', username=username) }}">add note</a>
+</body>
+
+</html>
