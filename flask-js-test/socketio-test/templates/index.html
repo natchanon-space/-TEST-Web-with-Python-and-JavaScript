@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+            socket.on('connect', () => {
+
+                document.querySelector("#submit").onclick = () => {
+
+                    const a = document.querySelector("#a").value;
+                    const b = document.querySelector("#b").value;
+
+                    document.querySelector("#a").value = '';
+                    document.querySelector("#b").value = '';
+
+                    socket.emit('calculation', {'a': a, 'b': b})
+                };
+            });
+
+            socket.on('announce', data => {
+                const div = document.createElement("div");
+                if (data.success) {
+                    div.innerHTML = `information of ${data.number.a}, ${data.number.b} : plus ${data.calculate.plus}, minus ${data.calculate.minus}, multiply ${data.calculate.mul}`
+                    document.querySelector('#result').append(div);
+                }
+                else {
+                    div.innerHTML = 'invalid input';
+                    document.querySelector('#result').append(div);
+                }
+            });
+            
+        });
+    </script>
+</head>
+
+<body>
+    <div>
+        <input type="text" id="a">
+        <input type="text" id="b">
+        <button id="submit">calculate!</button>
+    </div>
+    <div id="result">
+
+    </div>
+</body>
+
+</html>
