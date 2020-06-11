@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single-Page Apps</title>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            loadPage('first');
+
+            document.querySelectorAll(".nav-link").forEach(link => {
+                link.onclick = () => {
+                    loadPage(link.dataset.page);
+                    return false;
+                };
+            });
+
+        });
+
+        //update text on on popping state
+        window.onpopstate = e => {
+            const data = e.state;
+            document.title = data.title;
+            document.querySelector("#body").innerHTML = data.text;
+        };
+
+        //render contents for new page
+        function loadPage(name) {
+            const request = new XMLHttpRequest();
+            request.open('GET', `/${name}`);
+
+            request.onload = () => {
+                const response = request.responseText;
+
+                document.title = name;
+                document.querySelector("#body").innerHTML = response;
+
+                //push state to URL
+                const data = { "title": name, "text": response };
+                history.pushState(data, name, name);
+            };
+
+
+            request.send();
+        }
+
+    </script>
+</head>
+
+<body>
+    <ul id="nav">
+        <li><a href="" class="nav-link" data-page="first">first page</a></li>
+        <li><a href="" class="nav-link" data-page="second">second page</a></li>
+        <li><a href="" class="nav-link" data-page="third">third page</a></li>
+    </ul>
+    <div id="body"></div>
+</body>
+
+</html>
